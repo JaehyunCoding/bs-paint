@@ -15,6 +15,7 @@
  * To make the second one happen, the number to change
  * is the first argument to `repeat`, currently set at 10.
  */
+
 const gridWidth = 10;
 let count = 0;
 while (count <= gridWidth * gridWidth) {
@@ -49,8 +50,14 @@ while (count <= gridWidth * gridWidth) {
 // Add queries for all your squares, palette colors, and brush here.
 // (Note the singular or plural used in that sentence!)
 
-
-
+let paletteColors = document.querySelectorAll(`.palette div`)
+let brush = document.querySelector(`.current-brush`)
+// 누를 캔버스
+let canvas = document.querySelectorAll(`.canvas div`)
+// 누를 공간 전부
+let body = document.querySelector(`body`)
+// 꾹 눌렸는가 boolean
+let mouseDown = false
 /****************************
  * EVENT LISTENER FUNCTIONS *
 ****************************/
@@ -61,7 +68,43 @@ while (count <= gridWidth * gridWidth) {
 // run as event listeners (after the next step is set up) isn't a
 // bad idea for testing purposes.
 
+// css에서 .color-n에 따라 지정된 색을 넣으라고 했으니 class에다가 컬러의 마지막 index의 이름(.color-n)을 넣으면 된다.
+for (let i = 0; i < paletteColors.length; i++){
+  paletteColors[i].addEventListener(`click`, function(){
+    
+    let paletteClassList = paletteColors[i].classList
 
+    brush.classList.remove(brush.classList[i])
+    brush.classList.add(paletteClassList[1])
+  })
+}
+
+for (let i = 0; i < canvas.length; i++){
+  
+  canvas[i].addEventListener(`click`, function(){
+    canvas[i].classList.remove(canvas[i].classList[1])
+    canvas[i].classList.add(brush.classList[1])
+  })
+
+  canvas[i].addEventListener(`mouseover`, function(){
+    if(mouseDown === true){
+      canvas[i].classList.replace(canvas[i].classList[1], brush.classList[1])
+    }
+  })
+
+}
+
+body.addEventListener(`click`, function(){
+  console.log(`body clicked`)
+})
+
+body.addEventListener(`mousedown`, function(){
+  mouseDown = true
+})
+
+body.addEventListener(`mouseup`, function(){
+  mouseDown = false
+})
 
 /**************************
  * WIRING IT ALL TOGETHER *
